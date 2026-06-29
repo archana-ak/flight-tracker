@@ -34,7 +34,7 @@ export async function GET() {
   });
 }
 
-export async function POST() {
+export async function POST(request: Request) {
   const session = await getServerSession(authOptions);
   if (!session?.user) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
@@ -49,8 +49,16 @@ export async function POST() {
     return NextResponse.json({ error: "You already have an active flight" }, { status: 400 });
   }
 
+  const body = await request.json().catch(() => ({}));
+
   const flight = await prisma.flight.create({
-    data: { userId, startTime: new Date() },
+    data: {
+      userId,
+      startTime: new Date(),
+      flightNumber: body.flightNumber || null,
+      fromCity: body.fromCity || null,
+      toCity: body.toCity || null,
+    },
   });
 
   return NextResponse.json(flight);

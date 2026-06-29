@@ -4,6 +4,9 @@ export interface FlightData {
   endTime: string | null;
   duration: number | null;
   note: string | null;
+  flightNumber: string | null;
+  fromCity: string | null;
+  toCity: string | null;
   createdAt: string;
 }
 
